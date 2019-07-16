@@ -1,32 +1,64 @@
 <div>
-   <h1>Music Festival</h1>
-   <p>This list below is based on music festival using a cloud api</p>
-   <hr>
+    <h1>Music Festival</h1>
+    <p>This list below is based on music festival using a cloud api</p>
+    <hr>
 </div>
-<div  class="container">
-   <table class="table table-striped">
-      <thead>
-         <tr>
-            <!-- <th>Id</th> -->
-            <th >Record Label</th>
-            <th >Festival</th>
-            <th >Band</th>
+<div>
+    The original Json Object ->
+    <pre>{{jsonobj|json}}</pre>
+</div>
+<div>
+    The Normalized Json in tree format -->
+        <ul>
+            <li *ngFor="let recordLab of masterLabelAry">
+                {{ recordLab.recordLabelname }}
+                <ul>
+                    <li *ngFor="let bandn of recordLab.bands ">
+                        {{bandn.band}}
+                        <ul>
+                            <li >
+                                    {{bandn.festival}}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+<div class="container">
+    The Output in Tabular format -> 
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <!-- <th>Id</th> -->
+                <th>Record Label</th>
+                <th>Band</th>
+                <th>Festival</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let recordLab of masterLabelAry">
+                <td> {{recordLab.recordLabelname}}</td>
+                <td>
+                    <tr *ngFor="let bandn of recordLab.bands">
+                        <td>{{bandn.band}}</td>
+                    </tr>
+
+                </td>
+                <td>
+                        <tr *ngFor="let bandn of recordLab.bands">
+                                <td>{{bandn.festival}}</td>
+                            </tr>
+                </td>
+
+            </tr>
             
-         </tr>
-      </thead>
-      <tbody>
-         <tr  >
-            <td > Pacific Records</td>
-            <td >Twisted Tour</td>
-            <td >Squint-281</td>
-          
-         </tr>
-         <tr  >
-            <td > Still Bottom</td>
-            <td >TSmall night in</td>
-            <td >Anti Records</td>
-            
-         </tr>
-      </tbody>
-   </table>
+        </tbody>
+    </table>
+</div>
+<div>
+    The Normalised Json ->
+    <pre>{{masterLabelAry|json}}</pre>
+    <!-- <ng-container *ngFor="let list of schema.settings.list"> -->
 </div>
