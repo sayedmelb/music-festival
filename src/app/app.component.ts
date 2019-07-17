@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import * as _ from 'lodash';
+import { DataService } from './service/data.service';
+import {Observable} from 'rxjs';
+//import { DataService } from '.'
 
 @Component({
   selector: 'my-app',
@@ -9,9 +12,10 @@ import * as _ from 'lodash';
 
 export class AppComponent {
 
-  jsonobj: any = [{ "bands": [{ "name": "Propeller", "recordLabel": "Pacific Records" }, { "name": "Critter Girls", "recordLabel": "ACR" }] }, { "name": "Twisted Tour", "bands": [{ "name": "Squint-281" }, { "name": "Summon", "recordLabel": "Outerscope" }, { "name": "Auditones", "recordLabel": "Marner Sis. Recording" }] }, { "name": "Trainerella", "bands": [{ "name": "Manish Ditch", "recordLabel": "ACR" }, { "name": "Adrian Venti", "recordLabel": "Monocracy Records" }, { "name": "Wild Antelope", "recordLabel": "Still Bottom Records" }, { "name": "YOUKRANE", "recordLabel": "Anti Records" }] }, { "name": "LOL-palooza", "bands": [{ "name": "Werewolf Weekday", "recordLabel": "XS Recordings" }, { "name": "Winter Primates", "recordLabel": "" }, { "name": "Jill Black", "recordLabel": "Fourth Woman Records" }, { "name": "Frank Jupiter", "recordLabel": "Pacific Records" }] }, { "name": "Small Night In", "bands": [{ "name": "Green Mild Cold Capsicum", "recordLabel": "Marner Sis. Recording" }, { "name": "The Black Dashes", "recordLabel": "Fourth Woman Records" }, { "name": "Squint-281", "recordLabel": "Outerscope" }, { "name": "Wild Antelope", "recordLabel": "Marner Sis. Recording" }, { "name": "Yanke East", "recordLabel": "MEDIOCRE Music" }] }];
+  //jsonobj: any = [{ "bands": [{ "name": "Propeller", "recordLabel": "Pacific Records" }, { "name": "Critter Girls", "recordLabel": "ACR" }] }, { "name": "Twisted Tour", "bands": [{ "name": "Squint-281" }, { "name": "Summon", "recordLabel": "Outerscope" }, { "name": "Auditones", "recordLabel": "Marner Sis. Recording" }] }, { "name": "Trainerella", "bands": [{ "name": "Manish Ditch", "recordLabel": "ACR" }, { "name": "Adrian Venti", "recordLabel": "Monocracy Records" }, { "name": "Wild Antelope", "recordLabel": "Still Bottom Records" }, { "name": "YOUKRANE", "recordLabel": "Anti Records" }] }, { "name": "LOL-palooza", "bands": [{ "name": "Werewolf Weekday", "recordLabel": "XS Recordings" }, { "name": "Winter Primates", "recordLabel": "" }, { "name": "Jill Black", "recordLabel": "Fourth Woman Records" }, { "name": "Frank Jupiter", "recordLabel": "Pacific Records" }] }, { "name": "Small Night In", "bands": [{ "name": "Green Mild Cold Capsicum", "recordLabel": "Marner Sis. Recording" }, { "name": "The Black Dashes", "recordLabel": "Fourth Woman Records" }, { "name": "Squint-281", "recordLabel": "Outerscope" }, { "name": "Wild Antelope", "recordLabel": "Marner Sis. Recording" }, { "name": "Yanke East", "recordLabel": "MEDIOCRE Music" }] }];
   //jsonobj: any = [{ "bands": [{ "name": "Propeller", "recordLabel": "Pacific Records" }, { "name": "Critter Girls", "recordLabel": "ACR" }] }, { "name": "Twisted Tour", "bands": [{ "name": "Squint-281" }, { "name": "Summon", "recordLabel": "Outerscope" }, { "name": "Auditones", "recordLabel": "Marner Sis. Recording" }] }, { "name": "Trainerella", "bands": [{ "name": "Summon", "recordLabel": "Outerscope" },{ "name": "Manish Ditch", "recordLabel": "ACR" }, { "name": "Adrian Venti", "recordLabel": "Monocracy Records" }, { "name": "Wild Antelope", "recordLabel": "Still Bottom Records" }, { "name": "YOUKRANE", "recordLabel": "Anti Records" }] }, { "name": "LOL-palooza", "bands": [{ "name": "Werewolf Weekday", "recordLabel": "XS Recordings" }, { "name": "Winter Primates", "recordLabel": "" }, { "name": "Jill Black", "recordLabel": "Fourth Woman Records" }, { "name": "Frank Jupiter", "recordLabel": "Pacific Records" }] }, { "name": "Small Night In", "bands": [{ "name": "Green Mild Cold Capsicum", "recordLabel": "Marner Sis. Recording" }, { "name": "The Black Dashes", "recordLabel": "Fourth Woman Records" }, { "name": "Squint-281", "recordLabel": "Outerscope" }, { "name": "Wild Antelope", "recordLabel": "Marner Sis. Recording" }, { "name": "Yanke East", "recordLabel": "MEDIOCRE Music" }] }];
- 
+ jsonobj: any;
+
   recordLabelAry = [];
   masterLabelAry = [];
 
@@ -23,23 +27,32 @@ export class AppComponent {
   }
 
 
-  constructor() { }
+  constructor(private dataservice: DataService) { }
 
   ngOnInit() {
-    this.getDistinctRecordLabels();
-    this.normalizeData();
+    this.dataservice.getMusicFestivals().subscribe( res=>{
+      console.log("test",res);
+      this.jsonobj= res;
+      this.getDistinctRecordLabels();
+      this.normalizeData();
+    })
+    
+    //this.getDistinctRecordLabels();
+    //this.normalizeData();
     //this.lodashTest()
-  }
 
-  lodashTest() {
-    let str: string = "testing 34 dollars";
-    let aryStr = _.words(str);
-    console.log("arystr", aryStr);
-    console.log("Json obj", this.jsonobj);
-    this.getDistinctRecordLabels();
-    this.normalizeData();
 
   }
+
+  // lodashTest() {
+  //   let str: string = "testing 34 dollars";
+  //   let aryStr = _.words(str);
+  //   console.log("arystr", aryStr);
+  //   console.log("Json obj", this.jsonobj);
+  //   this.getDistinctRecordLabels();
+  //   this.normalizeData();
+
+  // }
 
   isInArray(array, name) {
 
