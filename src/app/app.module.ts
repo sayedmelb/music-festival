@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 
 import { AppComponent } from './app.component';
-import { DataService } from '../app/service/data.service';
+import { MusicDataService } from '../app/service/data.service';
 
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule,  HttpClientModule  ],
   declarations: [ AppComponent  ],
   bootstrap:    [ AppComponent ],
-  providers : [ DataService ]
+  providers : [ MusicDataService ]
 })
 export class AppModule { }

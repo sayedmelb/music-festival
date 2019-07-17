@@ -7,7 +7,7 @@ import { MusicFestival } from '../model/music.festival';
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
+export class MusicDataService {
 
   url = '/api/v1/festivals';
 
