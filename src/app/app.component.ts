@@ -33,6 +33,7 @@ export class AppComponent {
       this.jsonobj = res;
       this.getDistinctRecordLabels();
       this.normalizeData();
+      this.sortList();
     })
 
   }
@@ -47,10 +48,7 @@ export class AppComponent {
 
   // }
 
-  isInArray(array, name) {
-
-    return array.indexOf(name.toLowerCase()) > -1;
-  }
+  
 
   getDistinctRecordLabels() {
     _.forEach(this.jsonobj, festival => {
@@ -93,16 +91,41 @@ export class AppComponent {
             }
             recordLabelObj.bands.push(banddObj);
           }
+       
+          // if(recordLabelObj.bands.length>1){
+          //   let tmporderlistBands = recordLabelObj.bands;
+
+          //   tmporderlistBands = _.orderBy(tmporderlistBands, ['band'],['asc']); 
+          //   console.log("tmporderlistBands", tmporderlistBands);
+
+          //   recordLabelObj.bands = tmporderlistBands; 
+          // }
 
         });
-
+       
       });
+
       this.masterLabelAry.push(recordLabelObj);
 
     }
 
     //sorting next -->
 
+
+
+  }
+  sortList(){
+
+    _.forEach(this.masterLabelAry, record=> {
+      let tmporderlistBands = record.bands;
+      tmporderlistBands = _.orderBy(tmporderlistBands, ['band'],['asc']); 
+      record.bands = tmporderlistBands; 
+
+    });
+
+    let festivalstemp = this.masterLabelAry;
+    festivalstemp = _.orderBy(festivalstemp, ['recordLabelname'],['asc']); 
+    this.masterLabelAry = festivalstemp; 
 
 
   }
