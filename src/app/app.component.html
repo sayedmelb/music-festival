@@ -1,14 +1,40 @@
 <div class="container">
     <h1>Music Festival</h1>
-    <p>This list below is based on music festival using a cloud api</p>
+    <p>Author: Syed Wakil</p>
+    <p>This list below is based on music festival using a cloud api. </p>
+    <h2>Objective</h2>
+    <p>To load a in-comming Json payload from 
+            http://eacodingtest.digital.energyaustralia.com.au/api/v1/festivals and render the output in a different format</p>
+    <h2>Challenge Faced</h2>
+    <p>The API has been set to restrict call . The issue link https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS. To overcome the problem, proxy config of webpack has been used</p>        
+    <h2>To Run</h2>
+    <p>Clone the develop branch and follow  instruction in readme file</p>
+    <h3>For BDD and TDD test</h3>
+    <p>Test scripts are not been added to the project. If needed, can be added. </p>
+    <hr>
+    <button (click)="RefreshData()" class="btn btn-primary">Reload</button>
     <hr>
 </div>
-<div>
-    The original Json Object ->
-    <pre>{{jsonobj|json}}</pre>
+<div class="container warning-container" *ngIf="errorStatus">
+        <h1>Message Board</h1>
+        <span >{{errorMessage}}</span><br>
+        <span>Please cllick on Reload button after sometime..</span><br>
+        
+        <hr>
+    </div>
+<div class="container scroll-outer " *ngIf="!errorStatus">
+    The original Json Object (scroll to view ) ->
+    <div class="scroll-inner light">
+        <pre>{{jsonobj|json}}</pre>
+    </div>
+
 </div>
-<div>
-    The Normalized Json in tree format -->
+<div class="dv-pad">
+    &nbsp;
+</div>
+<div class="container scroll-outer " *ngIf="!errorStatus">
+    The Normalized Json in tree format (scroll to view ) -->
+    <div class="scroll-inner dark">
         <ul>
             <li *ngFor="let recordLab of masterLabelAry">
                 {{ recordLab.recordLabelname }}
@@ -16,8 +42,8 @@
                     <li *ngFor="let bandn of recordLab.bands ">
                         {{bandn.band}}
                         <ul>
-                            <li >
-                                    {{bandn.festival}}
+                            <li>
+                                {{bandn.festival}}
                             </li>
                         </ul>
                     </li>
@@ -25,10 +51,15 @@
             </li>
         </ul>
     </div>
-<div class="container">
-    The Output in Tabular format -> 
-    <table class="table table-striped">
-        <thead>
+
+</div>
+<div class="dv-pad">
+    &nbsp;
+</div>
+<div class="container" *ngIf="!errorStatus">
+    The Output in Tabular format ->
+    <table class="table ">
+        <thead class="thead-dark">
             <tr>
                 <!-- <th>Id</th> -->
                 <th>Record Label</th>
@@ -47,18 +78,20 @@
 
                 </td>
                 <td>
-                        <tr *ngFor="let bandn of recordLab.bands">
-                                <td>{{bandn.festival}}</td>
-                            </tr>
+                    <tr *ngFor="let bandn of recordLab.bands">
+                        <td>{{bandn.festival}}</td>
+                    </tr>
                 </td>
 
             </tr>
-            
+
         </tbody>
     </table>
 </div>
 <div>
+    
+</div>
+<!-- <div>
     The Normalised Json ->
     <pre>{{masterLabelAry|json}}</pre>
-    <!-- <ng-container *ngFor="let list of schema.settings.list"> -->
-</div>
+</div> -->

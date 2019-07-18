@@ -1,5 +1,29 @@
 p {
   font-family: Lato;
 }
+.scroll-outer {
+  height: 20rem;
+  position:relative;
 
+}
+
+.scroll-inner {
+  max-height:100%;overflow:auto;border:1px solid #786655;
+  
+}
+.light{
+  background-color: burlywood;
+}
+.dark{
+  background-color: yellowgreen;
+}
+
+
+.dv-pad{
+  height: 2rem;
+}
+.warning-container {
+  background-color: lightsalmon;
+
+}
 
