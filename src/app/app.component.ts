@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component,OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
-import { MusicDataService } from './service/data.service';
+import { MusicDataService } from './service/music.data.service';
 
 @Component({
   selector: 'my-app',
@@ -10,14 +10,12 @@ import { MusicDataService } from './service/data.service';
 
 export class AppComponent {
 
-  //jsonobj: any = [{ "bands": [{ "name": "Propeller", "recordLabel": "Pacific Records" }, { "name": "Critter Girls", "recordLabel": "ACR" }] }, { "name": "Twisted Tour", "bands": [{ "name": "Squint-281" }, { "name": "Summon", "recordLabel": "Outerscope" }, { "name": "Auditones", "recordLabel": "Marner Sis. Recording" }] }, { "name": "Trainerella", "bands": [{ "name": "Manish Ditch", "recordLabel": "ACR" }, { "name": "Adrian Venti", "recordLabel": "Monocracy Records" }, { "name": "Wild Antelope", "recordLabel": "Still Bottom Records" }, { "name": "YOUKRANE", "recordLabel": "Anti Records" }] }, { "name": "LOL-palooza", "bands": [{ "name": "Werewolf Weekday", "recordLabel": "XS Recordings" }, { "name": "Winter Primates", "recordLabel": "" }, { "name": "Jill Black", "recordLabel": "Fourth Woman Records" }, { "name": "Frank Jupiter", "recordLabel": "Pacific Records" }] }, { "name": "Small Night In", "bands": [{ "name": "Green Mild Cold Capsicum", "recordLabel": "Marner Sis. Recording" }, { "name": "The Black Dashes", "recordLabel": "Fourth Woman Records" }, { "name": "Squint-281", "recordLabel": "Outerscope" }, { "name": "Wild Antelope", "recordLabel": "Marner Sis. Recording" }, { "name": "Yanke East", "recordLabel": "MEDIOCRE Music" }] }];
-  //jsonobj: any = [{ "bands": [{ "name": "Propeller", "recordLabel": "Pacific Records" }, { "name": "Critter Girls", "recordLabel": "ACR" }] }, { "name": "Twisted Tour", "bands": [{ "name": "Squint-281" }, { "name": "Summon", "recordLabel": "Outerscope" }, { "name": "Auditones", "recordLabel": "Marner Sis. Recording" }] }, { "name": "Trainerella", "bands": [{ "name": "Summon", "recordLabel": "Outerscope" },{ "name": "Manish Ditch", "recordLabel": "ACR" }, { "name": "Adrian Venti", "recordLabel": "Monocracy Records" }, { "name": "Wild Antelope", "recordLabel": "Still Bottom Records" }, { "name": "YOUKRANE", "recordLabel": "Anti Records" }] }, { "name": "LOL-palooza", "bands": [{ "name": "Werewolf Weekday", "recordLabel": "XS Recordings" }, { "name": "Winter Primates", "recordLabel": "" }, { "name": "Jill Black", "recordLabel": "Fourth Woman Records" }, { "name": "Frank Jupiter", "recordLabel": "Pacific Records" }] }, { "name": "Small Night In", "bands": [{ "name": "Green Mild Cold Capsicum", "recordLabel": "Marner Sis. Recording" }, { "name": "The Black Dashes", "recordLabel": "Fourth Woman Records" }, { "name": "Squint-281", "recordLabel": "Outerscope" }, { "name": "Wild Antelope", "recordLabel": "Marner Sis. Recording" }, { "name": "Yanke East", "recordLabel": "MEDIOCRE Music" }] }];
   jsonobj: any;
 
+  errorMessage: string = "";
+  errorStatus: boolean = false;
   recordLabelAry = [];
   masterLabelAry = [];
-
-
 
   bandObj = {
     bandname: "",
@@ -28,27 +26,51 @@ export class AppComponent {
   constructor(private dataservice: MusicDataService) { }
 
   ngOnInit() {
+
+    this.getfestivalData();
+
+
+  }
+  getfestivalData() {
     this.dataservice.getMusicFestivals().subscribe(res => {
+      if (res.length == 0) {
+        this.errorStatus = true;
+        this.errorMessage = "Empty response"
+      }
+
 
       this.jsonobj = res;
+
       this.getDistinctRecordLabels();
       this.normalizeData();
       this.sortList();
-    })
+    },
+      err => {
+        console.log("http error", err);
+        this.errorStatus = true;
+        this.errorMessage = err.statusText;
+
+      }
+    );
+
 
   }
 
-  // lodashTest() {
-  //   let str: string = "testing 34 dollars";
-  //   let aryStr = _.words(str);
-  //   console.log("arystr", aryStr);
-  //   console.log("Json obj", this.jsonobj);
-  //   this.getDistinctRecordLabels();
-  //   this.normalizeData();
 
-  // }
 
-  
+
+  RefreshData(num: number) {
+      this.errorStatus = false;
+      this.jsonobj = [];
+      this.recordLabelAry = [];
+
+      this.masterLabelAry = [];
+      this.getfestivalData();
+    
+
+  }
+
+
 
   getDistinctRecordLabels() {
     _.forEach(this.jsonobj, festival => {
@@ -91,41 +113,32 @@ export class AppComponent {
             }
             recordLabelObj.bands.push(banddObj);
           }
-       
-          // if(recordLabelObj.bands.length>1){
-          //   let tmporderlistBands = recordLabelObj.bands;
 
-          //   tmporderlistBands = _.orderBy(tmporderlistBands, ['band'],['asc']); 
-          //   console.log("tmporderlistBands", tmporderlistBands);
-
-          //   recordLabelObj.bands = tmporderlistBands; 
-          // }
 
         });
-       
+
       });
 
       this.masterLabelAry.push(recordLabelObj);
 
     }
 
-    //sorting next -->
-
 
 
   }
-  sortList(){
 
-    _.forEach(this.masterLabelAry, record=> {
+  sortList() {
+
+    _.forEach(this.masterLabelAry, record => {
       let tmporderlistBands = record.bands;
-      tmporderlistBands = _.orderBy(tmporderlistBands, ['band'],['asc']); 
-      record.bands = tmporderlistBands; 
+      tmporderlistBands = _.orderBy(tmporderlistBands, ['band'], ['asc']);
+      record.bands = tmporderlistBands;
 
     });
 
     let festivalstemp = this.masterLabelAry;
-    festivalstemp = _.orderBy(festivalstemp, ['recordLabelname'],['asc']); 
-    this.masterLabelAry = festivalstemp; 
+    festivalstemp = _.orderBy(festivalstemp, ['recordLabelname'], ['asc']);
+    this.masterLabelAry = festivalstemp;
 
 
   }
